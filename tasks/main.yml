@@ -1,0 +1,24 @@
+---
+
+- name: Load kernel modules
+  modprobe:
+    name: "{{ item.name }}"
+    state: present
+    params: "{{ item.params|default('') }}"
+  with_items: "{{ kernel_modules }}"
+  when: kernel_modules is defined
+
+- name: Add kernel modules to autoload file
+  lineinfile:
+    create: true
+    dest: "{{ kernel_modules_conf_dir }}/{{ kernel_load_file }}"
+    line: "{{ item.name }}"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  when: kernel_modules is defined
+  with_items: "{{ kernel_modules }}"
+  notify:
+    - restart systemd-modules-load
+

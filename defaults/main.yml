@@ -1,0 +1,5 @@
+---
+
+kernel_modules_conf_dir: "/etc/modules-load.d"
+kernel_load_file: "load-ansible.conf"
+kernel_modules: []
